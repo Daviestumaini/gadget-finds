@@ -3,7 +3,7 @@ const products = [
 id:1,
 name:"iPhone 15 Pro",
 price:189000,
-emoji:"📱",
+image: ".images/iPhone 15 Pro.jpeg",
 category:"Phones"
 },
 {
