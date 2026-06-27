@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | Gadget Finds</title>
+
+    <link rel="stylesheet" href="CSS/style.css">
+
+    <style>
+
+        body{
+            font-family:Arial,Helvetica,sans-serif;
+            background:#f5f5f5;
+            margin:0;
+        }
+
+        .container{
+
+            max-width:700px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.1);
+
+        }
+
+        h1{
+
+            text-align:center;
+            margin-bottom:30px;
+
+        }
+
+        input{
+
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border-radius:8px;
+            border:1px solid #ccc;
+
+        }
+
+        .payment-box{
+
+            background:#ecfdf5;
+            border:2px solid #10b981;
+            padding:20px;
+            border-radius:10px;
+            margin:25px 0;
+
+        }
+
+        .payment-box h3{
+
+            margin-top:0;
+
+        }
+
+        .payment-box p{
+
+            margin:8px 0;
+
+        }
+
+        #checkoutBtn{
+
+            width:100%;
+            padding:15px;
+            border:none;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            border-radius:8px;
+            cursor:pointer;
+
+        }
+
+        #checkoutBtn:hover{
+
+            background:#1d4ed8;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Checkout</h1>
+
+<label>Email</label>
+
+<input
+type="email"
+id="customerEmail"
+readonly>
+
+<div class="payment-box">
+
+<h3>Pay via M-Pesa Send Money</h3>
+
+<p><strong>Business Name:</strong> Gadget Finds</p>
+
+<p><strong>Phone Number:</strong> 07XXXXXXXX</p>
+
+<p>
+
+Send the exact amount shown in your cart using
+<strong>Send Money</strong>.
+
+</p>
+
+</div>
+
+<label>Phone Number Used to Pay</label>
+
+<input
+type="text"
+id="paymentPhone"
+placeholder="07XXXXXXXX">
+
+<label>M-Pesa Transaction Code</label>
+
+<input
+type="text"
+id="mpesaCode"
+placeholder="QKX9ABC123">
+
+<h2>
+
+Total:
+KES <span id="totalPrice">0</span>
+
+</h2>
+
+<button id="checkoutBtn">
+
+Complete Order
+
+</button>
+
+</div>
+
+<script src="Js/checkout.js"></script>
+
+</body>
+
+</html>

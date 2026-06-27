@@ -13,14 +13,20 @@ app.use(
 require("./routes/auth")
 );
 
-app.use(
-"/api/login",
-require("./routes/login")
-);
+
 
 app.use(
   "/api/orders",
   require("./routes/orders")
+);
+
+app.use(
+    "/api/products",
+    require("./routes/products")
+);
+app.use(
+    "/api/admin",
+    require("./routes/admin")
 );
 
 app.get("/", (req, res) => {
@@ -32,37 +38,29 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.get("/test-order", async(req,res)=>{
+app.get(
+"/test-status",
+async(req,res)=>{
 
 const supabase =
 require("./config/supabase");
 
-const { data,error } =
+const {
+data,
+error
+}=
 await supabase
 .from("Orders")
-.insert([{
-
-user_id:
-"938af471-f869-420a-8492-742bcfa13658",
-
-order_id:
-"GF123",
-
-tracking_id:
-"TRK123",
-
-amount:5000,
-
-mpesa_code:
-"QWE123XYZ",
-
-payment_status:
-"Paid",
+.update({
 
 shipment_status:
-"Processing"
+"In Transit"
 
-}])
+})
+.eq(
+"tracking_id",
+"TRK123"
+)
 .select();
 
 res.json({
@@ -76,5 +74,38 @@ app.listen(PORT, () => {
     console.log(
         `Server running on port ${PORT}`
     );
+
+});
+app.get("/debug-users", async (req, res) => {
+
+    const supabase = require("./config/supabase");
+
+    const { data, error } = await supabase
+        .from("users")
+        .select("*");
+
+    res.json({
+        data,
+        error
+    });
+
+});
+app.get("/debug-service", async (req, res) => {
+
+    const supabase = require("./config/supabase");
+
+    const { data, error } = await supabase
+        .from("users")
+        .insert({
+            name: "Debug User",
+            email: "debug@test.com",
+            role: "customer"
+        })
+        .select();
+
+    res.json({
+        data,
+        error
+    });
 
 });

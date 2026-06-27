@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | Gadget Finds</title>
+
+    <link rel="stylesheet" href="CSS/index.css">
+
+</head>
+
+<body>
+
+    <header class="page-header">
+
+        <h1>🛒 Shopping Cart</h1>
+
+        <p>Review your items before checkout.</p>
+
+    </header>
+
+    <main class="cart-container">
+
+        <section class="cart-products">
+
+            <div id="cartItems">
+
+                <!-- Loaded by cart.js -->
+
+            </div>
+
+        </section>
+
+        <aside class="cart-summary">
+
+            <h2>Order Summary</h2>
+
+            <hr>
+
+            <div class="summary-row">
+
+                <span>Total</span>
+
+                <strong>
+
+                    KES
+
+                    <span id="totalPrice">
+
+                        0
+
+                    </span>
+
+                </strong>
+
+            </div>
+
+            <button
+                id="checkoutBtn"
+                class="primary-btn">
+
+                Proceed to Checkout
+
+            </button>
+
+            <button
+                id="clearCartBtn"
+                class="secondary-btn">
+
+                Clear Cart
+
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="window.location='index.html'">
+
+                Continue Shopping
+
+            </button>
+
+        </aside>
+
+    </main>
+
+    <script src="Js/cart.js"></script>
+
+</body>
+
+</html>

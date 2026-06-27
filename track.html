@@ -1,87 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Track Order | Gadget Finds</title>
+
+<style>
+
+body{
+
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f5f5;
+margin:0;
+
+}
+
+.container{
+
+max-width:700px;
+margin:50px auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,.1);
+
+}
+
+input{
+
+width:100%;
+padding:12px;
+margin:15px 0;
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+border:none;
+background:#2563eb;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+
+}
+
+.card{
+
+margin-top:30px;
+padding:20px;
+background:#f8fafc;
+border-radius:8px;
+
+}
+
+.status{
+
+font-weight:bold;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div class="tracking">
+<div class="container">
 
-<h1>Track Order</h1>
+<h1>Track Your Order</h1>
 
-<div id="trackingCard">
+<input
+id="trackingInput"
+placeholder="Enter Tracking ID">
+
+<button id="trackBtn">
+
+Track Order
+
+</button>
+
+<div
+id="result"
+class="card"
+style="display:none;">
+
+<h2 id="trackingID"></h2>
+
+<p>
+
+Payment Status:
+
+<span
+id="paymentStatus"
+class="status">
+
+</span>
+
+</p>
+
+<p>
+
+Shipment Status:
+
+<span
+id="shipmentStatus"
+class="status">
+
+</span>
+
+</p>
+
+<p>
+
+Amount:
+
+KES
+
+<span id="amount"></span>
+
+</p>
+
+<p>
+
+Customer:
+
+<span id="customerEmail"></span>
+
+</p>
 
 </div>
-<div class="tracking-card">
-
-    <h2>Package Tracking</h2>
-
-    <p>
-        Tracking ID:
-        <span id="trackingId"></span>
-    </p>
-
-    <p>
-        Order ID:
-        <span id="orderId"></span>
-    </p>
-
-    <p>
-        Amount:
-        KES
-        <span id="amount"></span>
-    </p>
-
-    <p>
-        Status:
-        <span id="status"></span>
-    </p>
 
 </div>
-<script>
-    const params =
-new URLSearchParams(
-window.location.search
-);
 
-const trackingId =
-params.get("tracking");
-
-fetch(
-`http://localhost:5000/api/orders/track/${trackingId}`
-)
-
-.then(res=>res.json())
-
-.then(order=>{
-
-document
-.getElementById("trackingId")
-.textContent =
-order.tracking_id;
-
-document
-.getElementById("orderId")
-.textContent =
-order.order_id;
-
-document
-.getElementById("amount")
-.textContent =
-order.amount;
-
-document
-.getElementById("status")
-.textContent =
-order.shipment_status;
-
-});
-</script>
-<script src="track.js"></script>
+<script src="Js/track.js"></script>
 
 </body>
 

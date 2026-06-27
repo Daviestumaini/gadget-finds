@@ -1,36 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-<link rel="stylesheet"
-href="style.css">
+    <meta charset="UTF-8">
 
-<link rel="stylesheet"
-href="mobile.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>
+    <title>Receipt | Gadget Finds</title>
 
-Receipt
-
-</title>
+    <link rel="stylesheet" href="CSS/index.css">
 
 </head>
 
 <body>
 
-<section class="section">
+    <header class="page-header">
 
-<div
-class="receiptCard"
-id="receiptCard">
+        <h1>✅ Order Successful</h1>
+
+        <p>Thank you for shopping with Gadget Finds.</p>
+
+    </header>
+
+    <main class="receipt-container">
+
+        <section class="receipt-card">
+
+            <div id="receiptInfo">
+
+                <!-- receipt.js loads everything here -->
+
+            </div>
+
+            <hr>
+
+            <div class="receipt-actions">
+
+                <button
+                    class="primary-btn"
+                    onclick="window.location='track.html'">
+
+                    📦 Track Order
+
+                </button>
+
+                <button
+                    class="secondary-btn"
+                    onclick="window.location='orders.html'">
+
+                    📋 My Orders
+
+                </button>
+
+                <button
+                    class="secondary-btn"
+                    onclick="window.location='index.html'">
+
+                    🛍 Continue Shopping
+
+                </button>
+
+            </div>
+
+<div class="receipt-message">
+
+    <p>
+        Your payment has been received successfully.
+    </p>
+
+    <p>
+        We are now preparing your order for dispatch.
+    </p>
 
 </div>
+        </section>
+        
 
-</section>
+    </main>
 
-<script src="receipt.js">
-
-</script>
+    <script src="Js/receipt.js"></script>
 
 </body>
 

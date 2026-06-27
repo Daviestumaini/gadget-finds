@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login - Gadget Finds</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+
+}
+
+.container{
+
+    width:380px;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+}
+
+h2{
+
+    text-align:center;
+    margin-bottom:25px;
+
+}
+
+input{
+
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+
+}
+
+button{
+
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+p{
+
+    margin-top:20px;
+    text-align:center;
+
+}
+
+a{
+
+    color:#2563eb;
+    text-decoration:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Login</h2>
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<button onclick="login()">
+
+Login
+
+</button>
+
+<p>
+
+Don't have an account?
+
+<a href="register.html">
+
+Register
+
+</a>
+
+</p>
+
+</div>
+
+<script>
+async function login() {
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/auth/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        localStorage.setItem("user_id", result.user.id);
+        localStorage.setItem("name", result.user.name);
+        localStorage.setItem("email", result.user.email);
+        localStorage.setItem("role", result.user.role);
+
+        if (result.session) {
+
+            localStorage.setItem(
+                "access_token",
+                result.session.access_token
+            );
+
+        }
+
+        alert("Login successful!");
+
+        window.location.href = "index.html";
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Server Error");
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

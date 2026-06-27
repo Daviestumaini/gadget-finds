@@ -1,0 +1,9 @@
+POST http://localhost:5000/api/orders/create
+Content-Type: application/json
+
+{
+  "user_id": "938af471-f869-420a-8492-742bcfa13658",
+  "amount": 5000,
+  "mpesa_code": "ABC123XYZ",
+  "customer_email": "daviestumaini@gmail.com"
+}

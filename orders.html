@@ -1,59 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Orders | Gadget Finds</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="mobile.css">
+    <title>My Orders | Gadget Finds</title>
+
+    <link rel="stylesheet" href="CSS/index.css">
 
 </head>
+
 <body>
 
-<nav>
+    <header class="page-header">
 
-<div class="logo">
-Gadget<span>Finds</span>
-</div>
+        <h1>📋 My Orders</h1>
 
-</nav>
+        <p>Track and manage your purchases.</p>
 
-<section class="section">
+    </header>
 
-<h1>📦 Your Orders</h1>
+    <main class="orders-container">
 
-<div id="ordersList"
-class="products">
+        <!-- Summary Cards -->
+        <section class="orders-summary">
 
-</div>
+            <div class="summary-card">
 
-</section>
+                <h2 id="totalOrders">0</h2>
 
-<div class="bottomNav">
+                <p>Total Orders</p>
 
-<a href="index.html">
-Home
-</a>
+            </div>
 
-<a href="orders.html">
-Orders
-</a>
+            <div class="summary-card">
 
-<a href="wishlist.html">
-Wishlist
-</a>
+                <h2 id="inTransit">0</h2>
 
-<a href="profile.html">
-Profile
-</a>
+                <p>In Transit</p>
 
-</div>
+            </div>
 
-<script src="orders.js"></script>
+            <div class="summary-card">
+
+                <h2 id="delivered">0</h2>
+
+                <p>Delivered</p>
+
+            </div>
+
+        </section>
+
+        <!-- Orders List -->
+        <section>
+
+            <div id="ordersList">
+
+                <!-- Loaded by orders.js -->
+
+            </div>
+
+        </section>
+
+        <div class="orders-actions">
+
+            <button
+                class="secondary-btn"
+                onclick="window.location='index.html'">
+
+                🛍 Continue Shopping
+
+            </button>
+
+        </div>
+
+    </main>
+
+    <script src="Js/orders.js"></script>
 
 </body>
+
 </html>

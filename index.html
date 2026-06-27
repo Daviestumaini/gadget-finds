@@ -1,215 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Gadget Finds</title>
-
-<link rel="stylesheet" href="index.css">
-
-<link
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gadget Finds</title>
+  <link rel="stylesheet" href="CSS/index.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
 <nav>
-    <div class="logo">
-        Gadget<span>Finds</span>
-    </div>
+  <div class="logo">Gadget<span>Finds</span></div>
 
-    <div class="search">
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Search gadgets...">
+    <div id="suggestions"></div>
+  </div>
 
-<input
-type="text"
-id="searchInput"
-placeholder="Search gadgets...">
-
-<div id="suggestions">
-
-</div>
-
-</div>
-
-    <div class="nav-icons">
-        <button id="themeBtn">
-            <i class="fa-solid fa-moon"></i>
-        </button>
-
-        <button id="cartBtn">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span id="cartCount">0</span>
-        </button>
-    </div>
-    <button>
-
-<i class="fa-solid fa-bell">
-
-</i>
-
-<span class="notificationCount">
-
-3
-
-</span>
-
-</button>
+  <div class="nav-icons">
+    <a href="wishlist.html" title="Wishlist"><button><i class="fa-solid fa-heart"></i></button></a>
+    <a href="notification.html" title="Notifications">
+      <button><i class="fa-solid fa-bell"></i><span class="notificationCount">3</span></button>
+    </a>
+    <a href="orders.html" title="Orders"><button><i class="fa-solid fa-box"></i></button></a>
+    <a href="profile.html" title="Profile"><button><i class="fa-solid fa-user"></i></button></a>
+    <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+    <button id="cartBtn"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount">0</span></button>
+  </div>
 </nav>
 
 <section class="hero">
-
-<h1>
-The gadgets you actually want.
-</h1>
-
-<p>
-Premium tech delivered to your door.
-</p>
-
-<button>
-Shop Now
-</button>
-
+  <h1>The gadgets you actually want.</h1>
+  <p>Premium tech delivered to your door.</p>
+  <button>Shop Now</button>
 </section>
 
 <section class="categories">
-
-<button class="active">All</button>
-<button>Phones</button>
-<button>Laptops</button>
-<button>Audio</button>
-<button>Gaming</button>
-
+  <button class="active">All</button>
+  <button>Phones</button>
+  <button>Laptops</button>
+  <button>Audio</button>
+  <button>Gaming</button>
 </section>
 
-<section class="products" id="products">
-
-</section>
+<section class="products" id="products"></section>
 
 <div class="cartDrawer" id="drawer">
-
-<div class="cart-header">
-
-<h2>Your Cart</h2>
-
-<button id="closeCart">
-×
-</button>
-
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button id="closeCart">×</button>
+  </div>
+  <div id="cartItems"></div>
+  <div class="cart-footer">
+    <h3>Total: KES <span id="totalPrice">0</span></h3>
+    <button class="checkoutBtn">Checkout</button>
+  </div>
 </div>
 
-<div id="cartItems">
-
-</div>
-
-<div class="cart-footer">
-
-<h3>Total: KES <span id="totalPrice">0</span></h3>
-
-<button class="checkoutBtn">
-Checkout
-</button>
-
-</div>
-
-</div>
-
-<div class="toast" id="toast">
-
-Added to cart
-
-</div>
+<div class="toast" id="toast">Added to cart</div>
 
 <div class="bottomNav">
-
-<i class="fa-solid fa-house"></i>
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<i class="fa-solid fa-user"></i>
-
+  <i class="fa-solid fa-house"></i>
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <i class="fa-solid fa-cart-shopping"></i>
+  <i class="fa-solid fa-user"></i>
 </div>
 
-<script src="index.js"></script>
-<!-- Login Modal -->
-
+<!-- Auth Modal -->
 <div class="modal" id="authModal">
-
-<div class="modal-content">
-
-<span class="closeAuth">×</span>
-
-<h2>Sign In</h2>
-
-<input type="text" id="username" placeholder="Name">
-
-<input type="email" id="email" placeholder="Email">
-
-<button id="loginBtn">
-Continue
-</button>
-
+  <div class="modal-content">
+    <span class="closeAuth">×</span>
+    <h2>Sign In</h2>
+    <input type="text" id="username" placeholder="Name">
+    <input type="email" id="email" placeholder="Email">
+    <button id="loginBtn">Continue</button>
+  </div>
 </div>
 
-</div>
-
-<!-- Checkout Modal -->
-
-<div class="modal" id="paymentModal">
-
-<div class="modal-content">
-
-<span class="closePayment">×</span>
-</div>
-
-</div>
+<!-- M-Pesa Payment Sheet -->
 <div class="paymentSheet" id="paymentSheet">
-
-<div class="sheetHandle"></div>
-
-<h2>🇰🇪 M-Pesa Payment</h2>
-
-<p class="amount">
-KES <span id="sheetAmount">0</span>
-</p>
-
-<div class="businessCard">
-
-<h3>Send Money To</h3>
-
-<h2 id="businessNumber">
-0704402183
-</h2>
-
-<p>Gadget Finds</p>
-
-<button id="copyBtn">
-Copy Number
-</button>
-
+  <div class="sheetHandle"></div>
+  <h2>🇰🇪 M-Pesa Payment</h2>
+  <p class="amount">KES <span id="sheetAmount">0</span></p>
+  <div class="businessCard">
+    <h3>Send Money To</h3>
+    <h2 id="businessNumber">0704402183</h2>
+    <p>Gadget Finds</p>
+    <button id="copyBtn">Copy Number</button>
+  </div>
+  <div class="instructions">
+    ✓ Open M-Pesa<br>
+    ✓ Enter your PIN on M-Pesa<br>
+    ✓ Complete payment
+  </div>
+  <input id="mpesaCode" placeholder="Transaction Code">
+  <button id="confirmPayment">Confirm Payment</button>
 </div>
 
-<div class="instructions">
-
-✓ Open M-Pesa
-
-✓ Enter your PIN on M-Pesa
-
-✓ Complete payment
-
-</div>
-
-<input
-id="mpesaCode"
-placeholder="Transaction Code">
-
-<button id="confirmPayment">
-Confirm Payment
-</button>
-
-</div>
+<script src="Js/index.js"></script>
 </body>
 </html>
