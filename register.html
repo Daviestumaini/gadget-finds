@@ -126,7 +126,7 @@ async function registerUser() {
 
         const response = await fetch(
 
-            "http://localhost:5000/api/auth/register",
+           `${API_BASE}/auth/register`,
 
             {
 
@@ -177,6 +177,6 @@ async function registerUser() {
 }
 
 </script>
-
+<script src="Js/config.js"></script>
 </body>
 </html>

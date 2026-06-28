@@ -3,154 +3,278 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>Checkout | Gadget Finds</title>
+<title>Checkout | Gadget Finds</title>
 
-    <link rel="stylesheet" href="CSS/style.css">
+<link
+rel="stylesheet"
+href="CSS/checkout.css">
 
-    <style>
-
-        body{
-            font-family:Arial,Helvetica,sans-serif;
-            background:#f5f5f5;
-            margin:0;
-        }
-
-        .container{
-
-            max-width:700px;
-            margin:40px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,.1);
-
-        }
-
-        h1{
-
-            text-align:center;
-            margin-bottom:30px;
-
-        }
-
-        input{
-
-            width:100%;
-            padding:12px;
-            margin:10px 0;
-            border-radius:8px;
-            border:1px solid #ccc;
-
-        }
-
-        .payment-box{
-
-            background:#ecfdf5;
-            border:2px solid #10b981;
-            padding:20px;
-            border-radius:10px;
-            margin:25px 0;
-
-        }
-
-        .payment-box h3{
-
-            margin-top:0;
-
-        }
-
-        .payment-box p{
-
-            margin:8px 0;
-
-        }
-
-        #checkoutBtn{
-
-            width:100%;
-            padding:15px;
-            border:none;
-            background:#2563eb;
-            color:white;
-            font-size:16px;
-            border-radius:8px;
-            cursor:pointer;
-
-        }
-
-        #checkoutBtn:hover{
-
-            background:#1d4ed8;
-
-        }
-
-    </style>
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="container">
+<!-- ===========================
+HEADER
+=========================== -->
 
-<h1>Checkout</h1>
+<header>
 
-<label>Email</label>
+<a href="index.html" class="backBtn">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Continue Shopping
+
+</a>
+
+<h1>
+
+Secure Checkout
+
+</h1>
+
+</header>
+
+<!-- ===========================
+MAIN
+=========================== -->
+
+<div class="checkoutContainer">
+
+<!-- ===========================
+LEFT SIDE
+=========================== -->
+
+<div class="checkoutLeft">
+
+<div class="card">
+
+<h2>
+
+Order Summary
+
+</h2>
+
+<div id="orderItems">
+
+</div>
+
+<hr>
+
+<div class="summaryRow">
+
+<span>Total</span>
+
+<strong>
+
+KES
+<span id="totalPrice">
+
+0
+
+</span>
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Delivery Details
+
+</h2>
 
 <input
 type="email"
 id="customerEmail"
+placeholder="Email"
 readonly>
-
-<div class="payment-box">
-
-<h3>Pay via M-Pesa Send Money</h3>
-
-<p><strong>Business Name:</strong> Gadget Finds</p>
-
-<p><strong>Phone Number:</strong> 07XXXXXXXX</p>
-
-<p>
-
-Send the exact amount shown in your cart using
-<strong>Send Money</strong>.
-
-</p>
 
 </div>
 
-<label>Phone Number Used to Pay</label>
+</div>
 
-<input
-type="text"
-id="paymentPhone"
-placeholder="07XXXXXXXX">
+<!-- ===========================
+RIGHT SIDE
+=========================== -->
 
-<label>M-Pesa Transaction Code</label>
+<div class="checkoutRight">
 
-<input
-type="text"
-id="mpesaCode"
-placeholder="QKX9ABC123">
+<div class="card paymentCard">
 
 <h2>
 
-Total:
-KES <span id="totalPrice">0</span>
+🇰🇪 Pay via M-Pesa
 
 </h2>
 
-<button id="checkoutBtn">
+<p>
 
-Complete Order
+Use
+<b>Send Money</b>
+to:
+
+</p>
+
+<div class="businessCard">
+
+<h3>
+
+Gadget Finds
+
+</h3>
+
+<h1
+id="businessNumber">
+
+0704402183
+
+</h1>
+
+<button
+id="copyBtn">
+
+Copy Number
 
 </button>
 
 </div>
 
+<p class="steps">
+
+1. Open M-Pesa<br>
+
+2. Select Send Money<br>
+
+3. Send the exact amount<br>
+
+4. Return here
+
+</p>
+
+<input
+type="tel"
+id="paymentPhone"
+placeholder="Phone used to pay">
+
+<input
+type="text"
+id="mpesaCode"
+placeholder="M-Pesa Transaction Code">
+
+<button
+id="checkoutBtn">
+
+Place Order
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+<!-- ===========================
+SECURITY INFO
+=========================== -->
+
+<div class="securityNotice">
+
+    <i class="fa-solid fa-shield-halved"></i>
+
+    <span>
+
+        Your payment is verified manually by the Gadget Finds team.
+        You will receive email updates after verification.
+
+    </span>
+
+</div>
+
+<!-- ===========================
+HELP SECTION
+=========================== -->
+
+<div class="helpCard">
+
+    <h3>
+
+        Need Help?
+
+    </h3>
+
+    <p>
+
+        If you've already paid but encounter any issues,
+        contact Gadget Finds support.
+
+    </p>
+
+    <p>
+
+        <i class="fa-solid fa-phone"></i>
+
+        0704402183
+
+    </p>
+
+    <p>
+
+        <i class="fa-solid fa-envelope"></i>
+
+        support@gadgetfinds.co.ke
+
+    </p>
+
+</div>
+
+<!-- ===========================
+LOADING OVERLAY
+=========================== -->
+
+<div
+id="loadingScreen"
+class="loadingScreen">
+
+    <div class="loader"></div>
+
+    <p>
+
+        Creating your order...
+
+    </p>
+
+</div>
+
+<!-- ===========================
+FOOTER
+=========================== -->
+
+<footer>
+
+    <p>
+
+        © 2026 Gadget Finds
+
+    </p>
+
+</footer>
+
+<script src="Js/config.js"></script>
 <script src="Js/checkout.js"></script>
 
 </body>

@@ -4,7 +4,7 @@
 // Gadget Finds - My Orders
 // ========================================
 
-const API_URL = "http://localhost:5000/api/orders/user";
+const API_URL = `${API_BASE}/orders`;
 
 const userId = localStorage.getItem("user_id");
 

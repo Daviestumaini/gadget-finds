@@ -177,7 +177,7 @@ saveBtn.onclick = async () => {
     }
 
     const url = editingId
-        ? `${API}/${editingId}`
+        ? `${API_BASE}/${editingId}`
         : API;
 
     const method = editingId
@@ -259,7 +259,7 @@ window.deleteProduct = async function(id){
 
     if(!confirmDelete) return;
 
-    const response = await fetch(`${API}/${id}`,{
+    const response = await fetch(`${API_BASE}/${id}`,{
 
         method:"DELETE",
 

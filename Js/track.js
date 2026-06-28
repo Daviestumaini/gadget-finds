@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api/orders/track";
+const API = `${API_BASE}/orders`;
 
 // =========================================
 // GET QUERY PARAMETER

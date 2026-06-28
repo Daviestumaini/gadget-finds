@@ -1,340 +1,442 @@
+const API = `${API_BASE}/products`;
 
-"use strict";
-
-// ─── Config ──────────────────────────────────────────────────────────────────
-const API = {
-    products:"http://localhost:5000/api/products",
-    orders:"http://localhost:5000/api/orders",
-    auth:"http://localhost:5000/api/auth"
-};
-
-// ─── Auth guard ───────────────────────────────────────────────────────────────
-const userId = localStorage.getItem("user_id");
-if (!userId) window.location.href = "login.html";
-
-// ─── State ────────────────────────────────────────────────────────────────────
 let products = [];
-let cart     = JSON.parse(localStorage.getItem("cart"))     || [];
-let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-let user     = JSON.parse(localStorage.getItem("user"))     || null;
+let filteredProducts = [];
 
-// ─── DOM refs ─────────────────────────────────────────────────────────────────
-const DOM = {
-  productsGrid:      document.getElementById("products"),
-  cartBtn:           document.getElementById("cartBtn"),
-  cartDrawer:        document.getElementById("drawer"),
-  closeCartBtn:      document.getElementById("closeCart"),
-  cartItemsEl:       document.getElementById("cartItems"),
-  totalPriceEl:      document.getElementById("totalPrice"),
-  cartCountEl:       document.getElementById("cartCount"),
-  toast:             document.getElementById("toast"),
-  authModal:         document.getElementById("authModal"),
-  paymentModal:      document.getElementById("paymentModal"),
-  paymentSheet:      document.getElementById("paymentSheet"),
-  sheetAmount:       document.getElementById("sheetAmount"),
-  mpesaCodeInput:    document.getElementById("mpesaCode"),
-  confirmPaymentBtn: document.getElementById("confirmPayment"),
-  loginBtn:          document.getElementById("loginBtn"),
-  usernameInput:     document.getElementById("username"),
-  emailInput:        document.getElementById("email"),
-  copyBtn:           document.getElementById("copyBtn"),
-  searchInput:       document.getElementById("searchInput"),
-  themeBtn:          document.getElementById("themeBtn"),
-  checkoutBtn:       document.querySelector(".checkoutBtn"),
-  shopNowBtn:        document.querySelector(".hero button"),
-};
+let cart =
+JSON.parse(localStorage.getItem("cart")) || [];
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
-let toastTimer = null;
+// ==========================================
+// LOAD USER
+// ==========================================
 
-function showToast(msg) {
-  DOM.toast.innerText = msg;
-  DOM.toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => DOM.toast.classList.remove("show"), 2500);
+const username =
+localStorage.getItem("name");
+
+if(username){
+
+document.getElementById("welcomeUser").innerHTML =
+`Hi, ${username.split(" ")[0]}`;
+
 }
 
-// ─── Persistence helpers ──────────────────────────────────────────────────────
-function saveCart()     { localStorage.setItem("cart",     JSON.stringify(cart));     }
-function saveWishlist() { localStorage.setItem("wishlist", JSON.stringify(wishlist)); }
+// ==========================================
+// LOAD PRODUCTS
+// ==========================================
 
-// ─── Product rendering ────────────────────────────────────────────────────────
-function renderProducts(list = products) {
-  if (!DOM.productsGrid) return;
+async function loadProducts(){
 
-  if (list.length === 0) {
-    DOM.productsGrid.innerHTML = `<p class="empty">No products found.</p>`;
-    return;
-  }
+try{
 
-  DOM.productsGrid.innerHTML = list.map(p => `
-    <div class="card">
-      <div class="card-img">
-        <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">
-      </div>
-      <h3>${escapeHtml(p.name)}</h3>
-      <div class="price">KES ${p.price.toLocaleString()}</div>
-      <div class="card-actions">
-        <button class="addBtn"  onclick="addToCart('${p.id}')">Add to Cart</button>
-        <button class="wishBtn" onclick="toggleWishlist('${p.id}')">
-          ${isInWishlist(p.id) ? "♥" : "♡"} Wishlist
-        </button>
-      </div>
-    </div>
-  `).join("");
+document.getElementById("loadingScreen").style.display="flex";
+
+const response =
+await fetch(API);
+
+products =
+await response.json();
+
+filteredProducts =
+products;
+
+renderProducts();
+
+updateCart();
+
+document.getElementById("loadingScreen").style.display="none";
+
+}catch(err){
+
+console.log(err);
+
+document.getElementById("loadingScreen").style.display="none";
+
+alert("Unable to load products.");
+
 }
 
-// ─── Cart ─────────────────────────────────────────────────────────────────────
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  if (!product) return;
-
-  const existing = cart.find(i => i.id === id);
-  existing ? existing.qty++ : cart.push({ ...product, qty: 1 });
-
-  saveCart();
-  renderCart();
-  showToast(`${product.name} added to cart ✓`);
 }
 
-function changeQty(id, delta) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
+loadProducts();
 
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+// ==========================================
+// RENDER PRODUCTS
+// ==========================================
 
-  saveCart();
-  renderCart();
+function renderProducts(){
+
+const container =
+document.getElementById("products");
+
+container.innerHTML="";
+
+if(filteredProducts.length===0){
+
+container.innerHTML=`
+
+<div class="emptyProducts">
+
+<h2>No products found.</h2>
+
+</div>
+
+`;
+
+return;
+
 }
 
-function renderCart() {
-  if (!DOM.cartItemsEl) return;
+filteredProducts.forEach(product=>{
 
-  let total = 0;
+container.innerHTML += `
 
-  if (cart.length === 0) {
-    DOM.cartItemsEl.innerHTML = `<p class="empty">Your cart is empty.</p>`;
-    DOM.totalPriceEl.innerText = "0";
-    DOM.cartCountEl.innerText  = "0";
-    return;
-  }
+<div class="productCard">
 
-  DOM.cartItemsEl.innerHTML = cart.map(item => {
-    const lineTotal = item.price * item.qty;
-    total += lineTotal;
-    return `
-      <div class="cartItem">
-        <h4>${escapeHtml(item.name)}</h4>
-        <p>KES ${lineTotal.toLocaleString()}</p>
-        <div class="qty-controls">
-          <button onclick="changeQty('${item.id}', -1)">−</button>
-          <span>${item.qty}</span>
-          <button onclick="changeQty('${item.id}',  1)">+</button>
-        </div>
-      </div>
-    `;
-  }).join("");
+<img
+src="${product.image}"
+alt="${product.name}">
 
-  DOM.totalPriceEl.innerText = total.toLocaleString();
-  DOM.cartCountEl.innerText  = cart.reduce((sum, i) => sum + i.qty, 0);
-}
+<h3>
 
-// ─── Wishlist ─────────────────────────────────────────────────────────────────
-function isInWishlist(id) {
-  return !!wishlist.find(i => i.id === id);
-}
+${product.name}
 
-function toggleWishlist(id) {
-  const product = products.find(p => p.id === id);
-  if (!product) return;
+</h3>
 
-  if (isInWishlist(id)) {
-    wishlist = wishlist.filter(i => i.id !== id);
-    saveWishlist();
-    showToast("Removed from wishlist");
-  } else {
-    wishlist.push(product);
-    saveWishlist();
-    showToast("Added to wishlist ❤");
-  }
+<div class="rating">
 
-  // Refresh card button state
-  renderProducts(
-    DOM.searchInput.value.trim()
-      ? products.filter(p => p.name.toLowerCase().includes(DOM.searchInput.value.toLowerCase()))
-      : products
-  );
-}
+⭐ ${product.rating}
 
-// ─── Checkout ─────────────────────────────────────────────────────────────────
-function startCheckout() {
-  if (cart.length === 0) {
-    showToast("Your cart is empty");
-    return;
-  }
-  if (!user) {
-    DOM.authModal.classList.add("show");
-  } else {
-    openPaymentModal();
-  }
-}
+</div>
 
-function openPaymentModal() {
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-  if (DOM.sheetAmount) DOM.sheetAmount.innerText = total.toLocaleString();
-  DOM.paymentModal.classList.add("show");
-}
+<p class="delivery">
 
-function handleLogin() {
-  const name  = DOM.usernameInput.value.trim();
-  const email = DOM.emailInput.value.trim();
+${product.delivery}
 
-  if (!name || !email) {
-    showToast("Please fill in all fields");
-    return;
-  }
+</p>
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showToast("Enter a valid email address");
-    return;
-  }
+<h2>
 
-  user = { name, email };
-  localStorage.setItem("user", JSON.stringify(user));
-  DOM.authModal.classList.remove("show");
-  showToast(`Welcome, ${user.name}!`);
-  openPaymentModal();
-}
+KES ${Number(product.price).toLocaleString()}
 
-function confirmPayment() {
-  const code = DOM.mpesaCodeInput.value.trim().toUpperCase();
+</h2>
 
-  if (!code) {
-    showToast("Enter your M-Pesa transaction code");
-    return;
-  }
+<button
+onclick="addToCart('${product.id}')">
 
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+Add To Cart
 
-  const order = {
-    id:          "GF" + Date.now(),
-    tracking:    "TRK" + Date.now(),
-    items:       [...cart],
-    total,
-    status:      "Processing",
-    paymentCode: code,
-    date:        new Date().toISOString(),
-  };
+</button>
 
-await fetch("http://localhost:5000/api/orders",{
-    method:"POST",
-    headers:{
-        "Content-Type":"application/json"
-    },
-    body:JSON.stringify(order)
+</div>
+
+`;
+
 });
 
-  cart = [];
-  saveCart();
-  renderCart();
-
-  DOM.paymentModal.classList.remove("show");
-  showToast("Order placed successfully! 🎉");
-  setTimeout(() => window.location.href = "track.html", 1800);
 }
 
-// ─── Search ───────────────────────────────────────────────────────────────────
-function handleSearch(e) {
-  const keyword  = e.target.value.trim().toLowerCase();
-  const filtered = keyword
-    ? products.filter(p => p.name.toLowerCase().includes(keyword))
-    : products;
-  renderProducts(filtered);
+// ==========================================
+// SEARCH
+// ==========================================
+
+document
+.getElementById("searchInput")
+.addEventListener("input",e=>{
+
+const value =
+e.target.value.toLowerCase();
+
+filteredProducts =
+products.filter(product=>
+
+product.name
+.toLowerCase()
+.includes(value)
+
+);
+
+renderProducts();
+
+});
+
+// ==========================================
+// CATEGORIES
+// ==========================================
+
+document
+.querySelectorAll(".category")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+document
+.querySelector(".active")
+.classList.remove("active");
+
+button.classList.add("active");
+
+const category=
+button.dataset.category;
+
+if(category==="All"){
+
+filteredProducts=
+products;
+
+}else{
+
+filteredProducts=
+products.filter(product=>
+
+product.category===category
+
+);
+
 }
 
-// ─── Theme toggle ─────────────────────────────────────────────────────────────
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-  const isDark = document.body.classList.contains("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  DOM.themeBtn.innerText = isDark ? "☀️" : "🌙";
+renderProducts();
+
+};
+
+});
+
+// ==========================================
+// ADD TO CART
+// ==========================================
+
+function addToCart(id){
+
+const product=
+products.find(p=>p.id==id);
+
+const existing=
+cart.find(item=>item.id==id);
+
+if(existing){
+
+existing.quantity++;
+
+}else{
+
+cart.push({
+
+...product,
+
+quantity:1
+
+});
+
 }
 
-function applySavedTheme() {
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-    if (DOM.themeBtn) DOM.themeBtn.innerText = "☀️";
-  }
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+updateCart();
+
+showToast();
+
 }
+// ==========================================
+// UPDATE CART
+// ==========================================
 
-// ─── Utility ──────────────────────────────────────────────────────────────────
-function escapeHtml(str = "") {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+function updateCart() {
 
-// ─── Event wiring ─────────────────────────────────────────────────────────────
-function bindEvents() {
-  DOM.cartBtn?.addEventListener("click",  () => DOM.cartDrawer.classList.add("show"));
-  DOM.closeCartBtn?.addEventListener("click", () => DOM.cartDrawer.classList.remove("show"));
+    localStorage.setItem("cart", JSON.stringify(cart));
 
-  DOM.themeBtn?.addEventListener("click", toggleTheme);
+    document.getElementById("cartCount").innerHTML = cart.length;
 
-  DOM.shopNowBtn?.addEventListener("click", () => {
-    DOM.productsGrid?.scrollIntoView({ behavior: "smooth" });
-  });
+    const cartItems =
+        document.getElementById("cartItems");
 
-  DOM.checkoutBtn?.addEventListener("click", startCheckout);
+    cartItems.innerHTML = "";
 
-  DOM.loginBtn?.addEventListener("click", handleLogin);
+    let total = 0;
 
-  DOM.confirmPaymentBtn?.addEventListener("click", confirmPayment);
+    cart.forEach(item => {
 
-  DOM.copyBtn?.addEventListener("click", () => {
-    navigator.clipboard.writeText("0712345678")
-      .then(() => showToast("Number copied ✓"))
-      .catch(() => showToast("Could not copy. Try manually."));
-  });
+        total += item.price * item.quantity;
 
-  DOM.searchInput?.addEventListener("input", handleSearch);
+        cartItems.innerHTML += `
 
-  // Close modals on backdrop click
-  [DOM.authModal, DOM.paymentModal].forEach(modal => {
-    modal?.addEventListener("click", e => {
-      if (e.target === modal) modal.classList.remove("show");
+<div class="cartItem">
+
+<img
+src="${item.image}"
+alt="${item.name}">
+
+<div class="cartInfo">
+
+<h4>${item.name}</h4>
+
+<p>KES ${Number(item.price).toLocaleString()}</p>
+
+<div class="qtyControls">
+
+<button onclick="decreaseQty('${item.id}')">−</button>
+
+<span>${item.quantity}</span>
+
+<button onclick="increaseQty('${item.id}')">+</button>
+
+</div>
+
+</div>
+
+<button
+class="removeBtn"
+onclick="removeItem('${item.id}')">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</div>
+
+`;
+
     });
-  });
+
+    document.getElementById("totalPrice").innerHTML =
+        total.toLocaleString();
+
 }
 
-// ─── Load products ────────────────────────────────────────────────────────────
-async function loadProducts() {
-  try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error(`Server error ${res.status}`);
-    const data = await res.json();
+// ==========================================
+// QUANTITY
+// ==========================================
 
-    if (!Array.isArray(data)) throw new Error("Unexpected response format");
+function increaseQty(id){
 
-    products = data;
-    renderProducts();
-  } catch (err) {
-    console.error("[Gadget Finds] Failed to load products:", err);
-    DOM.productsGrid.innerHTML = `
-      <p class="empty">
-        Could not load products. Please check your connection and try again.
-      </p>
-    `;
-  }
+const item=
+cart.find(p=>p.id==id);
+
+item.quantity++;
+
+updateCart();
+
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-(function init() {
-  applySavedTheme();
-  bindEvents();
-  renderCart();
-  loadProducts();
-})();
+function decreaseQty(id){
+
+const item=
+cart.find(p=>p.id==id);
+
+item.quantity--;
+
+if(item.quantity<=0){
+
+cart=
+cart.filter(p=>p.id!=id);
+
+}
+
+updateCart();
+
+}
+
+function removeItem(id){
+
+cart=
+cart.filter(p=>p.id!=id);
+
+updateCart();
+
+}
+
+// ==========================================
+// CART DRAWER
+// ==========================================
+
+document.getElementById("cartBtn").onclick=()=>{
+
+document
+.getElementById("drawer")
+.classList.add("open");
+
+};
+
+document.getElementById("mobileCart").onclick=()=>{
+
+document
+.getElementById("drawer")
+.classList.add("open");
+
+};
+
+document.getElementById("closeCart").onclick=()=>{
+
+document
+.getElementById("drawer")
+.classList.remove("open");
+
+};
+
+// ==========================================
+// CHECKOUT
+// ==========================================
+
+document
+.getElementById("checkoutBtn")
+.onclick=()=>{
+
+if(cart.length===0){
+
+alert("Your cart is empty.");
+
+return;
+
+}
+
+window.location.href=
+"checkout.html";
+
+};
+
+// ==========================================
+// TOAST
+// ==========================================
+
+function showToast(){
+
+const toast=
+document.getElementById("toast");
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+},2000);
+
+}
+
+// ==========================================
+// HERO BUTTON
+// ==========================================
+
+document
+.getElementById("shopNow")
+.onclick=()=>{
+
+document
+.getElementById("products")
+.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+};
+
+// ==========================================
+// INITIAL CART
+// ==========================================
+
+updateCart();

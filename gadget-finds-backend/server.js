@@ -13,8 +13,6 @@ app.use(
 require("./routes/auth")
 );
 
-
-
 app.use(
   "/api/orders",
   require("./routes/orders")
@@ -27,6 +25,10 @@ app.use(
 app.use(
     "/api/admin",
     require("./routes/admin")
+);
+app.use(
+    "/api/notifications",
+    require("./routes/notifications")
 );
 
 app.get("/", (req, res) => {

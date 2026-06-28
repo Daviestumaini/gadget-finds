@@ -83,6 +83,25 @@ console.log("PROFILE ERROR:", profileError);
             });
 
         }
+        // =======================================
+// CREATE LOGIN NOTIFICATION
+// =======================================
+
+await supabase
+    .from("Notification")
+    .insert({
+
+        user_id: profile.id,
+
+        title: "Welcome Back 👋",
+
+        message: `You signed in successfully.`,
+
+        type: "login",
+
+        is_read: true
+
+    });
 
         res.json({
 

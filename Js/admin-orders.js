@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api/orders";
+const API = `${API_BASE}/orders`;
 
 const token = localStorage.getItem("admin_access_token");
 
