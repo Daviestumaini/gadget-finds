@@ -105,29 +105,21 @@ type="email"
 id="customerEmail"
 readonly>
 
-<div class="payment-box">
-
-<h3>Pay via M-Pesa Send Money</h3>
-
-<p><strong>Business Name:</strong> Gadget Finds</p>
-
-<p><strong>Phone Number:</strong> 07XXXXXXXX</p>
-
-<p>
-
-Send the exact amount shown in your cart using
-<strong>Send Money</strong>.
-
-</p>
-
-</div>
-
-<label>Phone Number Used to Pay</label>
-
-<input
-type="text"
-id="paymentPhone"
-placeholder="07XXXXXXXX">
+<div class="paymentSheet" id="paymentSheet">
+  <div class="sheetHandle"></div>
+  <h2>🇰🇪 M-Pesa Payment</h2>
+  <p class="amount">KES <span id="sheetAmount">0</span></p>
+  <div class="businessCard">
+    <h3>Send Money To</h3>
+    <h2 id="businessNumber">0704402183</h2>
+    <p>Gadget Finds</p>
+    <button id="copyBtn">Copy Number</button>
+  </div>
+  <div class="instructions">
+    ✓ Open M-Pesa<br>
+    ✓ Enter your PIN on M-Pesa<br>
+    ✓ Complete payment
+  </div>
 
 <label>M-Pesa Transaction Code</label>
 
