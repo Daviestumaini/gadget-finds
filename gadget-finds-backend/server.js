@@ -28,7 +28,7 @@ app.use(
 );
 app.use(
     "/api/notifications",
-    require("./routes/notifications")
+    require("./routes/notification")
 );
 
 app.get("/", (req, res) => {
