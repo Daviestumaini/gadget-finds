@@ -4,7 +4,7 @@
 // Gadget Finds Admin Dashboard
 // ========================================
 
-const API_URL = "http://localhost:5000/api/products";
+const API_URL = `${API_BASE}/Products`;
 
 const productsDiv = document.getElementById("products");
 
